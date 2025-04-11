@@ -6,12 +6,18 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { type ColorResult, SketchPicker } from "react-color";
 import {
+  AlignCenterIcon,
+  AlignJustifyIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
   BoldIcon,
   ChevronDownIcon,
   HighlighterIcon,
   ImageIcon,
   ItalicIcon,
   Link2Icon,
+  ListIcon,
+  ListOrderedIcon,
   ListTodoIcon,
   LucideIcon,
   MessageSquarePlusIcon,
@@ -40,6 +46,87 @@ import {
 import { type Level } from "@tiptap/extension-heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+function ListButton() {
+  const { editor } = useEditorStore();
+
+  const lists = [
+    {
+      label: "Bullet List",
+      icon: ListIcon,
+      isActive: () => editor?.isActive("bulletList"),
+      onClick: () => editor?.chain().focus().toggleBulletList().run(),
+    },
+    {
+      label: "Ordered List",
+      icon: ListOrderedIcon,
+      isActive: () => editor?.isActive("orderedList"),
+      onClick: () => editor?.chain().focus().toggleOrderedList().run(),
+    },
+  ];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+          <ListIcon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+        {lists.map(({ label, icon: Icon, onClick, isActive }) => (
+          <button
+            key={label}
+            onClick={onClick}
+            className={cn(
+              "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+              isActive() && "bg-neutral-200/80"
+            )}
+          >
+            <Icon className="size-4" />
+            <span className="text-sm">{label}</span>
+          </button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function AlignButton() {
+  const { editor } = useEditorStore();
+  const alignments = [
+    { label: "Align Left", value: "left", icon: AlignLeftIcon },
+    { label: "Align Center", value: "center", icon: AlignCenterIcon },
+    { label: "Align Right", value: "right", icon: AlignRightIcon },
+    { label: "Align Justify", value: "justify", icon: AlignJustifyIcon },
+  ];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+          <AlignLeftIcon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+        {alignments.map(({ label, value, icon: Icon }) => (
+          <button
+            key={value}
+            onClick={() => editor?.chain().focus().setTextAlign(value).run()}
+            className={cn(
+              "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+              editor?.isActive({ textAlign: value }) && "bg-neutral-200/80"
+            )}
+          >
+            <Icon className="size-4" />
+            <span className="text-sm">{label}</span>
+          </button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 function ImageButton() {
   const { editor } = useEditorStore();
@@ -397,7 +484,9 @@ export default function Toolbar() {
 
   return (
     <div className="bg-[#F1F4F9] px-2.5 py-.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
-      {sections[0].map((item) => <ToolbarButton key={item.label} {...item} />)}
+      {sections[0].map((item) => (
+        <ToolbarButton key={item.label} {...item} />
+      ))}
 
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
 
@@ -411,7 +500,9 @@ export default function Toolbar() {
       {/* TODO: Font Size */}
 
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      {sections[1].map((item) => <ToolbarButton key={item.label} {...item} />)}
+      {sections[1].map((item) => (
+        <ToolbarButton key={item.label} {...item} />
+      ))}
 
       <TextColorButton />
       <HighlightColorButton />
@@ -421,10 +512,14 @@ export default function Toolbar() {
       <LinkButton />
       <ImageButton />
 
-      {/* TODO: Align */}
+      <AlignButton />
+
       {/* TODO: Line Height */}
-      {/* TODO: List */}
-      {sections[2].map((item) => <ToolbarButton key={item.label} {...item} />)}
+      <ListButton />
+
+      {sections[2].map((item) => (
+        <ToolbarButton key={item.label} {...item} />
+      ))}
     </div>
   );
 }

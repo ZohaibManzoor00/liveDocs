@@ -11,12 +11,16 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import ImageResize from "tiptap-extension-resize-image";
 import Underline from "@tiptap/extension-underline";
+import FontFamily from "@tiptap/extension-font-family";
+import TextStyle from "@tiptap/extension-text-style";
 
 import { useEditorStore } from "@/store/use-editor-store";
 
 export function Editor() {
   const { setEditor } = useEditorStore();
-  const initContent = `<table>
+  const initContent = `
+    <p>Hello World!</p>
+    <table>
       <tbody>
         <tr>
           <th>Name</th>
@@ -30,6 +34,7 @@ export function Editor() {
         </tr>
       </tbody>
     </table>`;
+  
   const editor = useEditor({
     onCreate({ editor }) {
       setEditor(editor);
@@ -72,9 +77,10 @@ export function Editor() {
       TaskList,
       Image,
       ImageResize,
-      Underline
+      Underline,
+      FontFamily,
+      TextStyle,
     ],
-    // content: "<p>Hello World!</p>",
     content: initContent,
   });
 

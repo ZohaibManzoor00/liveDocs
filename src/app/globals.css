@@ -88,6 +88,16 @@ body {
 }
 
 .tiptap {
+  /* Link styles */
+  a {
+    @apply text-blue-600;
+    cursor: pointer;
+
+    &:hover {
+      @apply underline;
+    }
+  }
+
   /* Image */
   img {
     display: block;
@@ -199,8 +209,9 @@ body {
     font-size: 1rem;
   }
 
-  h5, h5 {
-    font-size: .8rem;
+  h5,
+  h5 {
+    font-size: 0.8rem;
   }
 
   /* List */

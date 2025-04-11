@@ -3,6 +3,7 @@
 import { useEditorStore } from "@/store/use-editor-store";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { type ColorResult, SketchPicker } from "react-color";
 import {
   BoldIcon,
   ChevronDownIcon,
@@ -23,7 +24,30 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { type Level } from "@tiptap/extension-heading"
+import { type Level } from "@tiptap/extension-heading";
+
+function TextColorButton() {
+  const { editor } = useEditorStore();
+  const value = editor?.getAttributes("textStyle").color || "#000000";
+  const onChange = (color: ColorResult) => {
+    editor?.chain().focus().setColor(color.hex).run();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+          <span className="text-xs">A</span>
+          <div className="h-0.5 w-full" style={{ backgroundColor: value }} />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="p-0">
+        <SketchPicker color={value} onChange={onChange} />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 interface ToolbarButtonProps {
   onClick?: () => void;
@@ -78,11 +102,15 @@ function HeadingLevelButton() {
             key={value}
             style={{ fontSize }}
             onClick={() => {
-                if (value === 0) {
-                    editor?.chain().focus().setParagraph().run()
-                } else {
-                    editor?.chain().focus().toggleHeading({ level: value as Level }).run()
-                }
+              if (value === 0) {
+                editor?.chain().focus().setParagraph().run();
+              } else {
+                editor
+                  ?.chain()
+                  .focus()
+                  .toggleHeading({ level: value as Level })
+                  .run();
+              }
             }}
             className={cn(
               "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
@@ -219,7 +247,7 @@ export default function Toolbar() {
       },
     ],
   ];
-  
+
   return (
     <div className="bg-[#F1F4F9] px-2.5 py-.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
       {sections[0].map((item) => (
@@ -239,7 +267,7 @@ export default function Toolbar() {
         <ToolbarButton key={item.label} {...item} />
       ))}
 
-      {/* TODO: Text Color */}
+      <TextColorButton />
       {/* TODO: Highlight Color */}
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Link */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
-import Image from '@tiptap/extension-image'
+import Image from "@tiptap/extension-image";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -9,14 +9,14 @@ import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
-import ImageResize from "tiptap-extension-resize-image"
+import ImageResize from "tiptap-extension-resize-image";
+import Underline from "@tiptap/extension-underline";
 
 import { useEditorStore } from "@/store/use-editor-store";
 
 export function Editor() {
-  const { setEditor } = useEditorStore()
-  const initContent = (
-    `<table>
+  const { setEditor } = useEditorStore();
+  const initContent = `<table>
       <tbody>
         <tr>
           <th>Name</th>
@@ -29,32 +29,31 @@ export function Editor() {
           <td>Actress</td>
         </tr>
       </tbody>
-    </table>`
-  );
+    </table>`;
   const editor = useEditor({
     onCreate({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     onDestroy() {
-      setEditor(null)
+      setEditor(null);
     },
     onUpdate({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     onSelectionUpdate({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     onTransaction({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     onFocus({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     onBlur({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     onContentError({ editor }) {
-      setEditor(editor)
+      setEditor(editor);
     },
     editorProps: {
       attributes: {
@@ -72,7 +71,8 @@ export function Editor() {
       TaskItem.configure({ nested: true }),
       TaskList,
       Image,
-      ImageResize
+      ImageResize,
+      Underline
     ],
     // content: "<p>Hello World!</p>",
     content: initContent,

@@ -20,6 +20,7 @@ import TextAlign from '@tiptap/extension-text-align'
 
 import { useEditorStore } from "@/store/use-editor-store";
 import { FontSizeExtension } from "@/extensions/font-size";
+import { LineHeightExtension } from "@/extensions/line-height";
 
 export function Editor() {
   const { setEditor } = useEditorStore();
@@ -89,7 +90,8 @@ export function Editor() {
       Highlight.configure({ multicolor: true }),
       Link.configure({ openOnClick: false, autolink: true, defaultProtocol: "https" }),
       TextAlign.configure({ types: ["heading", "paragraph"]}),
-      FontSizeExtension
+      FontSizeExtension,
+      LineHeightExtension
     ],
     content: initContent,
   });

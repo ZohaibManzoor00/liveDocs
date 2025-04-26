@@ -38,6 +38,13 @@ import { useEditorStore } from "@/store/use-editor-store";
 
 export default function Navbar() {
   const { editor } = useEditorStore();
+  const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
+    editor
+      ?.chain()
+      .focus()
+      .insertTable({ rows, cols, withHeaderRow: false })
+      .run();
+  };
   return (
     <nav className="flex items-center justify-between print:hidden">
       <div className="flex gap-2 justify-center">
@@ -109,11 +116,15 @@ export default function Navbar() {
                   Edit
                 </MenubarTrigger>
                 <MenubarContent>
-                  <MenubarItem onClick={() => editor?.chain().focus().undo().run()}>
+                  <MenubarItem
+                    onClick={() => editor?.chain().focus().undo().run()}
+                  >
                     <Undo2Icon className="size-4 mr-2" />
                     Undo <MenubarShortcut>⌘Z</MenubarShortcut>
                   </MenubarItem>
-                  <MenubarItem onClick={() => editor?.chain().focus().redo().run()}>
+                  <MenubarItem
+                    onClick={() => editor?.chain().focus().redo().run()}
+                  >
                     <Redo2Icon className="size-4 mr-2" />
                     Redo <MenubarShortcut>⌘Y</MenubarShortcut>
                   </MenubarItem>
@@ -129,10 +140,14 @@ export default function Navbar() {
                   <MenubarSub>
                     <MenubarSubTrigger>Table</MenubarSubTrigger>
                     <MenubarSubContent>
-                      <MenubarItem>1 x 1</MenubarItem>
-                      <MenubarItem>2 x 2</MenubarItem>
-                      <MenubarItem>3 x 3</MenubarItem>
-                      <MenubarItem>4 x 4</MenubarItem>
+                      {[1, 2, 3, 4].map((val, i) => (
+                        <MenubarItem
+                          key={i}
+                          onClick={() => insertTable({ rows: val, cols: val })}
+                        >
+                          {val} x {val}
+                        </MenubarItem>
+                      ))}
                     </MenubarSubContent>
                   </MenubarSub>
                 </MenubarContent>

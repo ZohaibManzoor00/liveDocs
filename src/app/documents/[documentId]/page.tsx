@@ -15,7 +15,7 @@ export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
         <Navbar />
         <Toolbar />
       </div>
-      <div className="pt-[114px] print:0">
+      <div className="pt-[114px] print:pt-0">
         <Editor />
       </div>
     </div>

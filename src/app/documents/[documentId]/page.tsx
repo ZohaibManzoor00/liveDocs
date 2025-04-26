@@ -1,4 +1,5 @@
 import { Editor } from "./_components/editor";
+import Navbar from "./_components/navbar";
 import Toolbar from "./_components/toolbar";
 
 interface DocumentIdPageProps {
@@ -10,11 +11,11 @@ export default async function DocumentIdPage({ params }: DocumentIdPageProps) {
 
   return (
     <div className="min-h-screen bg-[#FAFBFD]">
-      <div>DocumentId: {documentId}</div>
-      <div>
+      <>
+        <Navbar />
         <Toolbar />
         <Editor />
-      </div>
+      </>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "./_components/navbar";
+import TemplateGallery from "./_components/template-gallery";
 
 export default function Home() {
   return (
@@ -9,11 +10,7 @@ export default function Home() {
       </div>
 
       <div className="mt-16">
-        Click{" "}
-        <Link href="/documents/123" className="text-blue-500 underline px-1">
-          here
-        </Link>{" "}
-        to go to document id
+       <TemplateGallery />
       </div>
     </div>
   );

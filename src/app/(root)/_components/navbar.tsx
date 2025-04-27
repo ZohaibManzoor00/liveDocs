@@ -1,7 +1,7 @@
 import Logo from "@/components/shared/logo";
 import SearchInput from "./search-input";
 
-export const Navbar = () => {
+export default function Navbar() {
   return (
     <nav className="flex items-center justify-between h-full w-full">
       <div className="flex gap-3 items-center shrink-0 pr-6">
@@ -12,4 +12,4 @@ export const Navbar = () => {
       <div />
     </nav>
   );
-};
+}

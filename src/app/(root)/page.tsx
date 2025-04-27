@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { Navbar } from "./_components/navbar";
+import Navbar from "./_components/navbar";
 import TemplateGallery from "./_components/template-gallery";
+import UserGallery from "./_components/user-gallery";
 
 export default function Home() {
   return (
@@ -10,7 +10,8 @@ export default function Home() {
       </div>
 
       <div className="mt-16">
-       <TemplateGallery />
+        <TemplateGallery />
+        <UserGallery />
       </div>
     </div>
   );

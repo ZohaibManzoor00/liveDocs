@@ -26,7 +26,7 @@ import Ruler from "./ruler";
 export function Editor() {
   const { setEditor } = useEditorStore();
   const initContent = `
-    <p>Hello World!</p>
+    <p>Fake text!</p>
     <table>
       <tbody>
         <tr>

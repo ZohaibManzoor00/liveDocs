@@ -35,6 +35,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { useEditorStore } from "@/store/use-editor-store";
+import Logo from "@/components/shared/logo";
 
 export default function Navbar() {
   const { editor } = useEditorStore();
@@ -84,15 +85,7 @@ export default function Navbar() {
   return (
     <nav className="flex items-center justify-between print:hidden">
       <div className="flex gap-2 justify-center">
-        <Link href="/">
-          <Image
-            src="/logo.svg"
-            alt="Logo"
-            width={36}
-            height={36}
-            className="w-9 h-8"
-          />
-        </Link>
+        <Logo />
         <div className="flex flex-col">
           <DocumentInput />
           <div className="flex">

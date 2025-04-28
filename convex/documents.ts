@@ -10,6 +10,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new ConvexError("Unauthorized");
+
     const documentId = await ctx.db.insert("documents", {
       title: args.title ?? "Untitled Document",
       ownerId: user.subject,
@@ -23,5 +24,21 @@ export const get = query({
   args: { paginationOpts: paginationOptsValidator },
   handler: async (ctx, args) => {
     return await ctx.db.query("documents").paginate(args.paginationOpts);
+  },
+});
+
+export const removeById = mutation({
+  args: { id: v.id("documents") },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) throw new ConvexError("Unauthorized");
+
+    const doc = await ctx.db.get(args.id);
+    if (!doc) throw new ConvexError("Document not found");
+
+    const isOwner = doc.ownerId === user.subject;
+    if (!isOwner) throw new ConvexError("Unauthorized");
+
+    return ctx.db.delete(args.id);
   },
 });

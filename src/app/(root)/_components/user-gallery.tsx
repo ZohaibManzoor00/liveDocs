@@ -13,12 +13,14 @@ import {
 } from "@/components/ui/table";
 import { LoaderIcon } from "lucide-react";
 import DocumentRow from "./document-row";
+import { Button } from "@/components/ui/button";
+import { paginationAmount } from "@/constants/templates";
 
 export default function UserGallery() {
   const { results, status, loadMore } = usePaginatedQuery(
     api.documents.get,
     {},
-    { initialNumItems: 5 },
+    { initialNumItems: paginationAmount },
   );
   return (
     <>
@@ -73,6 +75,16 @@ const DocumentsTable = ({
           )}
         </Table>
       )}
+      <div className="flex items-center justify-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => loadMore(paginationAmount)}
+          disabled={status !== "CanLoadMore"}
+        >
+          {status === "CanLoadMore" ? "Load more" : "End"}
+        </Button>
+      </div>
     </div>
   );
 };

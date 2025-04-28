@@ -19,3 +19,5 @@ export const templates = [
   { id: "cover-letter", label: "Cover Letter", imageUrl: "cover-letter.svg" },
   { id: "letter", label: "Letter", imageUrl: "letter.svg" },
 ];
+
+export const paginationAmount = 5;

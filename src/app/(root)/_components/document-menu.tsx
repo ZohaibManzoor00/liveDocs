@@ -1,4 +1,5 @@
 import RemoveDialog from "@/components/shared/remove-dialog";
+import RenameDialog from "@/components/shared/rename-dialog";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,7 +8,12 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ExternalLinkIcon, MoreVertical, TrashIcon } from "lucide-react";
+import {
+  ExternalLinkIcon,
+  FilePenIcon,
+  MoreVertical,
+  TrashIcon,
+} from "lucide-react";
 
 interface DocumentMenuProps {
   documentId: Id<"documents">;
@@ -28,6 +34,15 @@ export default function DocumentMenu({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
+        <RenameDialog docId={documentId} initialTitle={title}>
+          <DropdownMenuItem
+            onSelect={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FilePenIcon className="size-4 mr-2" />
+            Rename
+          </DropdownMenuItem>
+        </RenameDialog>
         <RemoveDialog docId={documentId}>
           <DropdownMenuItem
             onSelect={(e) => e.preventDefault()}

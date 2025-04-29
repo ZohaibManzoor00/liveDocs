@@ -21,6 +21,7 @@ export default function TemplateGallery() {
   const [isCreating, setIsCreating] = useState(false);
 
   const onTemplateClick = (title: string, initialContent: string) => {
+    console.log({title, initialContent})
     setIsCreating(true);
     create({ title, initialContent })
       .then((docId) => {
@@ -49,7 +50,7 @@ export default function TemplateGallery() {
                 >
                   <button
                     disabled={isCreating}
-                    onClick={() => onTemplateClick(template.label, "")}
+                    onClick={() => onTemplateClick(template.label, template.initialContent)}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,
                       backgroundSize: "cover",

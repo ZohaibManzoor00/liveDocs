@@ -128,5 +128,5 @@ export const getById = query({
     if (!document) throw new ConvexError("Document not found");
 
     return document;
-  },
+},
 });

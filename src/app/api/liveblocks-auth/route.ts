@@ -25,12 +25,21 @@ export async function POST(req: Request) {
   const isOwner = document.ownerId === user.id;
   const isOrgMember = !!(document.orgId && document.orgId === orgId);
 
-  if (!isOwner && !isOrgMember) return new Response("Unauthorized", { status: 401 });
+  if (!isOwner && !isOrgMember)
+    return new Response("Unauthorized", { status: 401 });
+
+  const name = user.fullName ?? "Anonymous";
+  const nameToNumber = name
+    .split("")
+    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const hue = Math.abs(nameToNumber) % 360;
+  const color = `hsl(${hue}, 80%, 60%)`;
 
   const session = liveblocks.prepareSession(user.id, {
     userInfo: {
-      name: user.fullName ?? "Anonymous",
+      name,
       avatar: user.imageUrl,
+      color,
     },
   });
 

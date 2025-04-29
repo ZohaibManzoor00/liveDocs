@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import Image from "@tiptap/extension-image";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
@@ -24,6 +25,7 @@ import { LineHeightExtension } from "@/extensions/line-height";
 import Ruler from "./ruler";
 
 export function Editor() {
+  const liveblocks = useLiveblocksExtension()
   const { setEditor } = useEditorStore();
   const initContent = `
     <p>Fake text!</p>
@@ -98,6 +100,7 @@ export function Editor() {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       FontSizeExtension,
       LineHeightExtension,
+      liveblocks
     ],
     content: initContent,
   });
@@ -116,9 +119,7 @@ function EditorSkeleton() {
   return (
     <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:p-0 print:bg-white print:overflow-visible animate-pulse">
       <div className="min-w-max flex justify-center w-[816px] print:py-0 mx-auto print:w-full print:min-w-0">
-        <div className="flex flex-col min-h-[1054px] w-[816px] py-10 pr-14 bg-white border border-[#C7C7C7] space-y-4 p-10">
-         
-        </div>
+        <div className="flex flex-col min-h-[1054px] w-[816px] py-10 pr-14 bg-white border border-[#C7C7C7] space-y-4 p-10"></div>
       </div>
     </div>
   );

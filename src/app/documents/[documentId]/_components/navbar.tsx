@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/menubar";
 import { useEditorStore } from "@/store/use-editor-store";
 import Logo from "@/components/shared/logo";
+import Avatars from "@/components/shared/avatars";
 
 export default function Navbar() {
   const { editor } = useEditorStore();
@@ -244,6 +245,7 @@ export default function Navbar() {
       </div>
 
       <div className="flex gap-3 items-center pl-4">
+        <Avatars />
         <OrganizationSwitcher
           afterCreateOrganizationUrl="/"
           afterLeaveOrganizationUrl="/"

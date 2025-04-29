@@ -1,6 +1,6 @@
 import Logo from "@/components/shared/logo";
 import SearchInput from "./search-input";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 
 export default function Navbar() {
   return (
@@ -10,7 +10,16 @@ export default function Navbar() {
         <h3 className="text-xl">Live Docs</h3>
       </div>
       <SearchInput />
-      <UserButton />
+
+      <div className="flex gap-3 items-center pl-4">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterSelectPersonalUrl="/"
+        />
+        <UserButton />
+      </div>
     </nav>
   );
 }

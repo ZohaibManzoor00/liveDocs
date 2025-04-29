@@ -13,6 +13,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { templates } from "@/constants/templates";
+import { toast } from "sonner";
 
 export default function TemplateGallery() {
   const router = useRouter();
@@ -22,7 +23,10 @@ export default function TemplateGallery() {
   const onTemplateClick = (title: string, initialContent: string) => {
     setIsCreating(true);
     create({ title, initialContent })
-      .then((docId) => router.push(`/documents/${docId}`))
+      .then((docId) => {
+        toast.success(`${title} template created`)
+        router.push(`/documents/${docId}`)
+      })
       .finally(() => setIsCreating(false));
   };
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "convex/react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -36,14 +37,20 @@ export default function RenameDialog({
     setIsUpdating(true);
 
     update({ id: docId, title: title.trim() || "Untitled" })
-      .then(() => setOpen(false))
+      .catch(() => toast.error("Something went wrong"))
+      .then(() => {
+        setOpen(false);
+        toast.success("Document Updated");
+      })
       .finally(() => setIsUpdating(false));
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent> {/*TODO: stopPropagation when clicking outside of dialog*/}
+      <DialogContent>
+        {" "}
+        {/*TODO: stopPropagation when clicking outside of dialog*/}
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Rename document</DialogTitle>

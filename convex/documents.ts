@@ -2,6 +2,23 @@ import { paginationOptsValidator } from "convex/server";
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+export const getByIds = query({
+  args: { ids: v.array(v.id("documents")) },
+  handler: async (ctx, { ids }) => {
+    const documents = [];
+    for (const id of ids) {
+      const document = await ctx.db.get(id);
+
+      if (document) {
+        documents.push({ id: document._id, name: document.title });
+      } else {
+        documents.push({ id, name: "[Archived]" });
+      }
+    }
+    return documents;
+  },
+});
+
 export const create = mutation({
   args: {
     title: v.optional(v.string()),
@@ -72,13 +89,13 @@ export const removeById = mutation({
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new ConvexError("Unauthorized");
-    
+
     const doc = await ctx.db.get(args.id);
     if (!doc) throw new ConvexError("Document not found");
-    
-    const orgId = (user.organization_id ?? undefined) as string | undefined
+
+    const orgId = (user.organization_id ?? undefined) as string | undefined;
     const isOwner = doc.ownerId === user.subject;
-    const isOrgMember = !!(doc.orgId && doc.orgId === orgId)
+    const isOrgMember = !!(doc.orgId && doc.orgId === orgId);
     if (!isOwner && !isOrgMember) throw new ConvexError("Unauthorized");
 
     return ctx.db.delete(args.id);
@@ -94,9 +111,9 @@ export const updateById = mutation({
     const doc = await ctx.db.get(args.id);
     if (!doc) throw new ConvexError("Document not found");
 
-    const orgId = (user.organization_id ?? undefined) as string | undefined
+    const orgId = (user.organization_id ?? undefined) as string | undefined;
     const isOwner = doc.ownerId === user.subject;
-    const isOrgMember = !!(doc.orgId && doc.orgId === orgId)
+    const isOrgMember = !!(doc.orgId && doc.orgId === orgId);
     if (!isOwner && !isOrgMember) throw new ConvexError("Unauthorized");
 
     return ctx.db.patch(args.id, { title: args.title });

@@ -8,8 +8,9 @@ import {
   RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense";
-import { getUsers } from "./actions";
+import { getUsers, getDocuments } from "./actions";
 import FullScreenLoader from "@/components/shared/full-screen-loader";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 type User = { id: string; name: string; avatar: string };
 
@@ -33,12 +34,18 @@ export function Room({ children }: { children: ReactNode }) {
     fetchUsers();
   }, [fetchUsers]);
 
-  console.log(users);
-
   return (
     <LiveblocksProvider
       throttle={16}
-      authEndpoint="/api/liveblocks-auth"
+      authEndpoint={async () => {
+        const endpoint = "/api/liveblocks-auth";
+        const room = params.documentId as string;
+        const res = await fetch(endpoint, {
+          method: "POST",
+          body: JSON.stringify({ room }),
+        });
+        return await res.json();
+      }}
       resolveUsers={({ userIds }) => {
         return userIds.map(
           (userId) => users.find((user) => user.id === userId) ?? undefined,
@@ -53,7 +60,13 @@ export function Room({ children }: { children: ReactNode }) {
         }
         return filteredUsers.map((user) => user.id);
       }}
-      resolveRoomsInfo={() => []}
+      resolveRoomsInfo={async ({ roomIds }) => {
+        const documents = await getDocuments(roomIds as Id<"documents">[]);
+        return documents.map((doc) => ({
+          id: doc.id,
+          name: doc.name,
+        }));
+      }}
     >
       <RoomProvider id={params.documentId as string}>
         <ClientSideSuspense

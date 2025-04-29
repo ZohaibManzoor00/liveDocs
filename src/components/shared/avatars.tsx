@@ -39,7 +39,7 @@ function AvatarStack() {
           ))}
         </div>
       </div>
-      <Separator orientation="vertical" />
+      <Separator orientation="vertical" className="h-6"/>
     </>
   );
 }

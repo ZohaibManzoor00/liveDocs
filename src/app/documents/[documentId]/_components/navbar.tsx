@@ -37,8 +37,13 @@ import { useEditorStore } from "@/store/use-editor-store";
 import Logo from "@/components/shared/logo";
 import Avatars from "@/components/shared/avatars";
 import Inbox from "./inbox";
+import { Doc } from "../../../../../convex/_generated/dataModel";
 
-export default function Navbar() {
+interface NavbarProps {
+  data: Doc<'documents'>
+}
+
+export default function Navbar({ data }: NavbarProps) {
   const { editor } = useEditorStore();
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
@@ -64,7 +69,7 @@ export default function Navbar() {
     const blob = new Blob([JSON.stringify(content)], {
       type: "application/json",
     });
-    onDownload(blob, "document.json");
+    onDownload(blob, `${data.title}.json`);
   };
 
   const onSaveHTML = () => {
@@ -72,7 +77,7 @@ export default function Navbar() {
 
     const content = editor.getHTML();
     const blob = new Blob([content], { type: "text/html" });
-    onDownload(blob, "document.html");
+    onDownload(blob, `${data.title}.html`);
   };
 
   const onSaveText = () => {
@@ -80,7 +85,7 @@ export default function Navbar() {
 
     const content = editor.getText();
     const blob = new Blob([content], { type: "text/plain" });
-    onDownload(blob, "document.txt");
+    onDownload(blob, `${data.title}.txt`);
   };
 
   return (
@@ -88,7 +93,7 @@ export default function Navbar() {
       <div className="flex gap-2 justify-center">
         <Logo />
         <div className="flex flex-col">
-          <DocumentInput />
+          <DocumentInput title={data.title} id={data._id}/>
           <div className="flex">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
               <MenubarMenu>

@@ -2,7 +2,6 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
-import Image from "@tiptap/extension-image";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -23,9 +22,10 @@ import { useEditorStore } from "@/store/use-editor-store";
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import Ruler from "./ruler";
+import { Threads } from "./threads";
 
 export function Editor() {
-  const liveblocks = useLiveblocksExtension()
+  const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
   const initContent = `
     <p>Fake text!</p>
@@ -78,14 +78,13 @@ export function Editor() {
       },
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure({ history: false }),
       Table,
       TableCell,
       TableHeader,
       TableRow,
       TaskItem.configure({ nested: true }),
       TaskList,
-      Image,
       ImageResize,
       Underline,
       FontFamily,
@@ -100,9 +99,8 @@ export function Editor() {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       FontSizeExtension,
       LineHeightExtension,
-      liveblocks
+      liveblocks.configure({ initContent }),
     ],
-    content: initContent,
   });
 
   return (
@@ -110,6 +108,7 @@ export function Editor() {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         {editor ? <EditorContent editor={editor} /> : <EditorSkeleton />}
+        <Threads editor={editor}/>
       </div>
     </div>
   );

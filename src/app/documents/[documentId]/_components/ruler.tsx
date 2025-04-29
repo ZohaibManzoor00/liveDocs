@@ -1,16 +1,17 @@
 import { useMutation, useStorage } from "@liveblocks/react";
 import { useRef, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
+import { LEFT_RIGHT_MARGIN_DEFAULT, MIN_SPACE, PAGE_WIDTH } from "@/constants/editor";
 
 const markers = Array.from({ length: 83 }, (_, i) => i);
 
 export default function Ruler() {
-  const leftMargin = useStorage((root) => root.leftMargin) ?? 56;
+  const leftMargin = useStorage((root) => root.leftMargin) ?? LEFT_RIGHT_MARGIN_DEFAULT;
   const setLeftMargin = useMutation(({ storage }, position: number) => {
     storage.set("leftMargin", position);
   }, []);
 
-  const rightMargin = useStorage((root) => root.rightMargin) ?? 56;
+  const rightMargin = useStorage((root) => root.rightMargin) ?? LEFT_RIGHT_MARGIN_DEFAULT;
   const setRightMargin = useMutation(({ storage }, position: number) => {
     storage.set("rightMargin", position);
   }, []);
@@ -28,9 +29,6 @@ export default function Ruler() {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    const PAGE_WIDTH = 816,
-      MIN_SPACE = 100;
-
     if ((isDraggingLeft || isDraggingRight) && rulerRef.current) {
       const container = rulerRef.current.querySelector("#ruler-container");
       if (container) {
@@ -61,11 +59,11 @@ export default function Ruler() {
   };
 
   const handleLeftDoubleClick = () => {
-    setLeftMargin(56);
+    setLeftMargin(LEFT_RIGHT_MARGIN_DEFAULT);
   };
 
   const handleRightDoubleClick = () => {
-    setRightMargin(56);
+    setRightMargin(LEFT_RIGHT_MARGIN_DEFAULT);
   };
 
   return (
@@ -74,7 +72,7 @@ export default function Ruler() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      className="w-[816px] mx-auto h-6 border-b border-gray-300 flex items-end relative select-none print:hidden"
+      className={`w-[${PAGE_WIDTH}px] mx-auto h-6 border-b border-gray-300 flex items-end relative select-none print:hidden`}
     >
       <div id="ruler-container" className="w-full h-full relative">
         <Marker
@@ -94,7 +92,7 @@ export default function Ruler() {
         <div className="absolute inset-x-0 bottom-0 h-full">
           <div className="relative h-full w-[816px]">
             {markers.map((marker) => {
-              const position = (marker * 816) / 82;
+              const position = (marker * PAGE_WIDTH) / 82;
               return (
                 <div
                   key={marker}

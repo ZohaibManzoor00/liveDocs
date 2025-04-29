@@ -17,19 +17,23 @@ import Highlight from "@tiptap/extension-highlight";
 import { Color } from "@tiptap/extension-color";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
-
-import { useEditorStore } from "@/store/use-editor-store";
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
+
+import { useEditorStore } from "@/store/use-editor-store";
+import { useStorage } from "@liveblocks/react";
+
 import Ruler from "./ruler";
 import { Threads } from "./threads";
 
 export function Editor() {
   const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
-  const initContent = `
-    <p>Fake text!</p>
-    <table>
+
+  const leftMargin = useStorage((root) => root.leftMargin);
+  const rightMargin = useStorage((root) => root.rightMargin);
+
+  const initContent = ` <p>Fake text!</p> <table>
       <tbody>
         <tr>
           <th>Name</th>
@@ -72,7 +76,7 @@ export function Editor() {
     },
     editorProps: {
       attributes: {
-        style: "padding-left: 56px; padding-right: 56px",
+        style: `padding-left: ${leftMargin ?? 56}px; padding-right: ${rightMargin ?? 56}px`,
         class:
           "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] py-10 pr-14 cursor-text",
       },
@@ -108,7 +112,7 @@ export function Editor() {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         {editor ? <EditorContent editor={editor} /> : <EditorSkeleton />}
-        <Threads editor={editor}/>
+        <Threads editor={editor} />
       </div>
     </div>
   );

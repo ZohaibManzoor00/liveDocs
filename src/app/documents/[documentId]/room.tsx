@@ -13,7 +13,7 @@ import FullScreenLoader from "@/components/shared/full-screen-loader";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { LEFT_RIGHT_MARGIN_DEFAULT } from "@/constants/editor";
 
-type User = { id: string; name: string; avatar: string };
+type User = { id: string; name: string; avatar: string, color: string };
 
 export function Room({ children }: { children: ReactNode }) {
   const params = useParams();

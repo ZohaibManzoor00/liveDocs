@@ -8,25 +8,40 @@ const liveblocks = new Liveblocks({
   secret: process.env.LIVEBLOCKS_SECRET_KEY!,
 });
 
+type OrgClaim = {
+  o?: { id: string };
+  organization_id?: string;
+};
+
 export async function POST(req: Request) {
   const { sessionClaims } = await auth();
-  if (!sessionClaims) return new Response("Unauthorized", { status: 401 });
+  // if (!sessionClaims) return new Response("Unauthorized", { status: 401 });
+  if (!sessionClaims) return Response.json({ error: "Unauthorized" }, { status: 401 });
+
 
   const user = await currentUser();
-  if (!user) return new Response("Unauthorized", { status: 401 });
+  // if (!user) return new Response("Unauthorized", { status: 401 });
+  if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
+
 
   const { room } = await req.json();
 
   const document = await convex.query(api.documents.getById, { id: room });
-  if (!document) return new Response("Unauthorized", { status: 401 });
+  // if (!document) return new Response("Unauthorized", { status: 401 });
+  if (!document) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const orgId = sessionClaims.org_id ?? (sessionClaims as any).o?.id;
 
+  // const orgId = sessionClaims.org_id ?? (sessionClaims as any).o?.id;
+  const { o, organization_id } = sessionClaims as OrgClaim;
+  const orgId = organization_id ?? o?.id;
+  // const orgId: string | undefined = sessionClaims.organization_id ?? sessionClaims.o?.id;
   const isOwner = document.ownerId === user.id;
   const isOrgMember = !!(document.orgId && document.orgId === orgId);
 
-  if (!isOwner && !isOrgMember)
-    return new Response("Unauthorized", { status: 401 });
+  console.log({isOrgMember, isOwner})
+  if (!isOwner && !isOrgMember) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const name = user.fullName ?? "Anonymous";
   const nameToNumber = name
